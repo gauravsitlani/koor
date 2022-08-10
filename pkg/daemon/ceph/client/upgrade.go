@@ -21,11 +21,11 @@ import (
 	"strings"
 	"time"
 
+	cephv1 "github.com/koor-tech/koor/pkg/apis/ceph.rook.io/v1"
+	"github.com/koor-tech/koor/pkg/clusterd"
+	cephver "github.com/koor-tech/koor/pkg/operator/ceph/version"
+	"github.com/koor-tech/koor/pkg/util"
 	"github.com/pkg/errors"
-	cephv1 "github.com/rook/rook/pkg/apis/ceph.rook.io/v1"
-	"github.com/rook/rook/pkg/clusterd"
-	cephver "github.com/rook/rook/pkg/operator/ceph/version"
-	"github.com/rook/rook/pkg/util"
 	"k8s.io/apimachinery/pkg/util/sets"
 )
 
@@ -213,10 +213,10 @@ func okToContinueMDSDaemon(context *clusterd.Context, clusterInfo *ClusterInfo, 
 // So if we invoke this method function with "mon", it will look for the least recent version
 // Assume the following:
 //
-// "mon": {
-//     "ceph version 16.2.5 (cbff874f9007f1869bfd3821b7e33b2a6ffd4988) pacific (stable)": 2,
-//     "ceph version 17.2.0 (3a54b2b6d167d4a2a19e003a705696d4fe619afc) quincy (stable)": 1
-// }
+//	"mon": {
+//	    "ceph version 16.2.5 (cbff874f9007f1869bfd3821b7e33b2a6ffd4988) pacific (stable)": 2,
+//	    "ceph version 17.2.0 (3a54b2b6d167d4a2a19e003a705696d4fe619afc) quincy (stable)": 1
+//	}
 //
 // In the case we will pick: "ceph version 16.2.5 (cbff874f9007f1869bfd3821b7e33b2a6ffd4988) pacific (stable)": 2,
 // And eventually return 16.2.5

@@ -21,9 +21,9 @@ import (
 	"strings"
 	"time"
 
+	opcontroller "github.com/koor-tech/koor/pkg/operator/ceph/controller"
+	cephver "github.com/koor-tech/koor/pkg/operator/ceph/version"
 	"github.com/pkg/errors"
-	opcontroller "github.com/rook/rook/pkg/operator/ceph/controller"
-	cephver "github.com/rook/rook/pkg/operator/ceph/version"
 )
 
 const (

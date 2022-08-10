@@ -25,14 +25,14 @@ import (
 
 	"github.com/coreos/pkg/capnslog"
 	netclient "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/client/clientset/versioned/typed/k8s.cni.cncf.io/v1"
+	rookclient "github.com/koor-tech/koor/pkg/client/clientset/versioned"
+	"github.com/koor-tech/koor/pkg/clusterd"
+	"github.com/koor-tech/koor/pkg/operator/k8sutil"
+	"github.com/koor-tech/koor/pkg/util"
+	"github.com/koor-tech/koor/pkg/util/exec"
+	"github.com/koor-tech/koor/pkg/util/flags"
+	"github.com/koor-tech/koor/pkg/version"
 	"github.com/pkg/errors"
-	rookclient "github.com/rook/rook/pkg/client/clientset/versioned"
-	"github.com/rook/rook/pkg/clusterd"
-	"github.com/rook/rook/pkg/operator/k8sutil"
-	"github.com/rook/rook/pkg/util"
-	"github.com/rook/rook/pkg/util/exec"
-	"github.com/rook/rook/pkg/util/flags"
-	"github.com/rook/rook/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	v1 "k8s.io/api/core/v1"
@@ -55,13 +55,13 @@ var (
 	logLevelRaw        string
 	operatorImage      string
 	serviceAccountName string
-	logger             = capnslog.NewPackageLogger("github.com/rook/rook", "rookcmd")
+	logger             = capnslog.NewPackageLogger("github.com/koor-tech/koor", "rookcmd")
 )
 
 // Initialize the configuration parameters. The precedence from lowest to highest is:
-//  1) default value (at compilation)
-//  2) environment variables (upper case, replace - with _, and rook prefix. For example, discovery-url is ROOK_DISCOVERY_URL)
-//  3) command line parameter
+//  1. default value (at compilation)
+//  2. environment variables (upper case, replace - with _, and rook prefix. For example, discovery-url is ROOK_DISCOVERY_URL)
+//  3. command line parameter
 func init() {
 	RootCmd.PersistentFlags().StringVar(&logLevelRaw, "log-level", "INFO", "logging level for logging/tracing output (valid values: ERROR,WARNING,INFO,DEBUG)")
 	RootCmd.PersistentFlags().StringVar(&operatorImage, "operator-image", "", "Override the image url that the operator uses. The default is read from the operator pod.")

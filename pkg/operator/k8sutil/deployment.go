@@ -22,9 +22,9 @@ import (
 	"time"
 
 	"github.com/banzaicloud/k8s-objectmatcher/patch"
+	"github.com/koor-tech/koor/pkg/clusterd"
+	"github.com/koor-tech/koor/pkg/util"
 	"github.com/pkg/errors"
-	"github.com/rook/rook/pkg/clusterd"
-	"github.com/rook/rook/pkg/util"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -61,8 +61,9 @@ func GetDeploymentSpecImage(clientset kubernetes.Interface, d appsv1.Deployment,
 // error if the deployment does not exist to be updated or if it takes too long.
 // This method has a generic callback function that each backend can rely on
 // It serves two purposes:
-//   1. verify that a resource can be stopped
-//   2. verify that we can continue the update procedure
+//  1. verify that a resource can be stopped
+//  2. verify that we can continue the update procedure
+//
 // Basically, we go one resource by one and check if we can stop and then if the resource has been successfully updated
 // we check if we can go ahead and move to the next one.
 func UpdateDeploymentAndWait(ctx context.Context, clusterContext *clusterd.Context, modifiedDeployment *appsv1.Deployment, namespace string, verifyCallback func(action string) error) error {

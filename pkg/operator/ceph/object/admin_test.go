@@ -21,13 +21,13 @@ import (
 	"testing"
 	"time"
 
+	v1 "github.com/koor-tech/koor/pkg/apis/ceph.rook.io/v1"
+	"github.com/koor-tech/koor/pkg/clusterd"
+	"github.com/koor-tech/koor/pkg/daemon/ceph/client"
+	"github.com/koor-tech/koor/pkg/operator/test"
+	"github.com/koor-tech/koor/pkg/util/exec"
+	exectest "github.com/koor-tech/koor/pkg/util/exec/test"
 	"github.com/pkg/errors"
-	v1 "github.com/rook/rook/pkg/apis/ceph.rook.io/v1"
-	"github.com/rook/rook/pkg/clusterd"
-	"github.com/rook/rook/pkg/daemon/ceph/client"
-	"github.com/rook/rook/pkg/operator/test"
-	"github.com/rook/rook/pkg/util/exec"
-	exectest "github.com/rook/rook/pkg/util/exec/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -562,7 +562,8 @@ const secondPeriodGet = `{
 // example real-world output from 'radosgw-admin period update' after the first period commit,
 // and with no changes since the first commit
 // note: output was modified to increment the epoch to make sure this code works in case the "epoch"
-//       behavior changes in radosgw-admin in the future
+//
+//	behavior changes in radosgw-admin in the future
 const secondPeriodUpdateWithoutChanges = `{
     "id": "94ba560d-a560-431d-8ed4-85a2891f9122:staging",
     "epoch": 2,

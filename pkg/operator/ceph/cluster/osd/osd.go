@@ -29,14 +29,14 @@ import (
 	"k8s.io/client-go/kubernetes"
 
 	"github.com/coreos/pkg/capnslog"
+	cephv1 "github.com/koor-tech/koor/pkg/apis/ceph.rook.io/v1"
+	"github.com/koor-tech/koor/pkg/clusterd"
+	cephclient "github.com/koor-tech/koor/pkg/daemon/ceph/client"
+	osdconfig "github.com/koor-tech/koor/pkg/operator/ceph/cluster/osd/config"
+	"github.com/koor-tech/koor/pkg/operator/ceph/controller"
+	cephver "github.com/koor-tech/koor/pkg/operator/ceph/version"
+	"github.com/koor-tech/koor/pkg/operator/k8sutil"
 	"github.com/pkg/errors"
-	cephv1 "github.com/rook/rook/pkg/apis/ceph.rook.io/v1"
-	"github.com/rook/rook/pkg/clusterd"
-	cephclient "github.com/rook/rook/pkg/daemon/ceph/client"
-	osdconfig "github.com/rook/rook/pkg/operator/ceph/cluster/osd/config"
-	"github.com/rook/rook/pkg/operator/ceph/controller"
-	cephver "github.com/rook/rook/pkg/operator/ceph/version"
-	"github.com/rook/rook/pkg/operator/k8sutil"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
@@ -45,7 +45,7 @@ import (
 )
 
 var (
-	logger                                           = capnslog.NewPackageLogger("github.com/rook/rook", "op-osd")
+	logger                                           = capnslog.NewPackageLogger("github.com/koor-tech/koor", "op-osd")
 	cephVolumeRawEncryptionModeMinOctopusCephVersion = cephver.CephVersion{Major: 15, Minor: 2, Extra: 5}
 )
 
@@ -667,9 +667,10 @@ func getTopologyFromNode(ctx context.Context, clientset kubernetes.Interface, d 
 }
 
 // GetLocationWithNode gets the topology information about the node. The return values are:
-//  location: The CRUSH properties for the OSD to apply
-//  topologyAffinity: The label to be applied to the OSD daemon to guarantee it will start in the same
-//		topology as the OSD prepare job.
+//
+//	 location: The CRUSH properties for the OSD to apply
+//	 topologyAffinity: The label to be applied to the OSD daemon to guarantee it will start in the same
+//			topology as the OSD prepare job.
 func GetLocationWithNode(ctx context.Context, clientset kubernetes.Interface, nodeName string, crushRoot, crushHostname string) (string, string, error) {
 	node, err := getNode(ctx, clientset, nodeName)
 	if err != nil {

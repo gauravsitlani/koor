@@ -18,8 +18,8 @@ package kms
 
 import (
 	"github.com/hashicorp/vault/api"
+	cephv1 "github.com/koor-tech/koor/pkg/apis/ceph.rook.io/v1"
 	"github.com/libopenstorage/secrets"
-	cephv1 "github.com/rook/rook/pkg/apis/ceph.rook.io/v1"
 	v1 "k8s.io/api/core/v1"
 )
 
